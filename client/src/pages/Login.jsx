@@ -1,0 +1,89 @@
+import React, { useState, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const { showToast } = useToast();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            await login(email, password);
+            navigate('/');
+        } catch (err) {
+            showToast('Invalid email or password');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="auth-page">
+            <div className="container">
+                {/* Title */}
+                <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                    <h1 className="ios-title">Sign In</h1>
+                    <p className="text-secondary" style={{ marginTop: 8 }}>
+                        Welcome back to IMS
+                    </p>
+                </div>
+
+                {/* Form */}
+                <form onSubmit={handleSubmit}>
+                    <div className="ios-card">
+                        <div className="ios-row">
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                className="ios-input"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                autoComplete="email"
+                                disabled={loading}
+                            />
+                        </div>
+                        <div className="ios-row">
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                className="ios-input"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                autoComplete="current-password"
+                                disabled={loading}
+                            />
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: 24 }}>
+                        <button
+                            type="submit"
+                            className="ios-button ios-button-primary"
+                            disabled={loading}
+                        >
+                            {loading && <span className="btn-spinner" />}
+                            {loading ? 'Signing In...' : 'Sign In'}
+                        </button>
+                    </div>
+                </form>
+
+                {/* Footer */}
+                <div style={{ marginTop: 32, textAlign: 'center' }}>
+                    <span className="text-secondary">Don't have an account? </span>
+                    <Link to="/register" className="ios-link">Sign Up</Link>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Login;
