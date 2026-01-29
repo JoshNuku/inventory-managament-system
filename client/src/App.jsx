@@ -11,6 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/add-product" element={<AddProduct />} />
                 <Route path="/edit-product/:id" element={<EditProduct />} />
               </Route>
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <ThemeToggle />
           </AuthProvider>
